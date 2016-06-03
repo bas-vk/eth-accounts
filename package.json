@@ -1,0 +1,25 @@
+{
+  "name": "eth-account",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": [
+    "ethereum"
+  ],
+  "author": "Bas van Kervel",
+  "license": "LGPL-3.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --reporter spec",
+    "install": "node-gyp configure rebuild"
+  },
+  "gypfile": true,
+  "dependencies": {
+    "chai": "^3.5.0",
+    "ethereumjs-util": "^4.4.1",
+    "mocha": "^2.5.3",
+    "nan": "^2.3.3",
+    "rimraf": "^2.5.2",
+    "temp": "^0.8.3"
+  },
+  "devDependencies": {}
+}
