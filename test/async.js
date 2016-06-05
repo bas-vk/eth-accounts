@@ -9,7 +9,7 @@ describe('Async create', function() {
 	this.timeout(10000);
 	
 	var path = temp.path();
-	var manager = accounts.AccountManager(path);
+	var manager = accounts.newManager(path);
 	var passwd = 'my passwd';
 	
 	after(function() {
@@ -25,6 +25,8 @@ describe('Async create', function() {
 		// throws on failure
 		manager.newAccount(passwd, function(err, address) {
 			expect(err).to.be.null;
+			expect(address.length).to.equal(42);
+			expect(address.substr(0, 2)).to.equal("0x");
 			
 			var accountsAfter = manager.accounts();				
 			
@@ -43,7 +45,7 @@ describe('Async unlock', function() {
 	this.timeout(30000);
 	
 	var path = temp.path();
-	var manager = accounts.AccountManager(path);
+	var manager = accounts.newManager(path);
 	var passwd = 'my passwd';
 
 	after(function() {
@@ -58,7 +60,9 @@ describe('Async unlock', function() {
 		var account = manager.newAccount(passwd);
 		
 		manager.unlock(account, passwd, function(err, unlocked) {
+			expect(err).to.be.null;
 			expect(unlocked).to.be.true;
+			
 			done();
 		});
 	});
@@ -67,9 +71,31 @@ describe('Async unlock', function() {
 		var account = manager.newAccount(passwd);
 		
 		manager.unlock(account, 'invalid' + passwd, function(err, unlocked) {
+			expect(err).to.equal('could not decrypt key with given passphrase');
 			expect(unlocked).to.be.false;
+			
 			done();
 		});		
+	});
+	
+	it('unknown account', function(done) {
+		var unknownAccount = '0x391694e7e0b0cce554cb130d723a9d27458f9298';
+		manager.unlock(unknownAccount, passwd, function(err, unlocked) {
+			expect(err).to.equal('no key for given address or file');
+			expect(unlocked).to.be.false;
+			
+			done();
+		});
+	});
+	
+	it('invalid account', function(done) {
+		var unknownAccount = '0xab';
+		manager.unlock(unknownAccount, passwd, function(err, unlocked) {
+			expect(err).to.equal('no key for given address or file');
+			expect(unlocked).to.be.false;
+			
+			done();
+		});
 	});
 });
 
@@ -77,7 +103,7 @@ describe('Async lock', function() {
 	this.timeout(10000);
 	
 	var path = temp.path();
-	var manager = accounts.AccountManager(path);
+	var manager = accounts.newManager(path);
 	var passwd = 'my passwd';
 	
 	it('account', function(done) {
@@ -96,6 +122,7 @@ describe('Async lock', function() {
 		// verify that account is locked
 		manager.lock(address, function(locked) {
 			expect(locked).to.be.true;
+			
 			var sign = function () { manager.sign(address, data); };
 			expect(sign).to.throw('account is locked');
 			
@@ -108,7 +135,7 @@ describe('Async sign', function() {
 	this.timeout(10000);
 	
 	var path = temp.path();
-	var manager = accounts.AccountManager(path);
+	var manager = accounts.newManager(path);
 	var passwd = 'my passwd';
 	
 	after(function() {
@@ -141,6 +168,7 @@ describe('Async sign', function() {
 			var pubKey = ethUtils.ecrecover(d, v, r, s);	
 			var r = ethUtils.publicToAddress(pubKey);
 		
+			// verify signing was done with account associated with address
 			assert.equal('0x' + r.toString('hex'), address);
 			
 			done();
@@ -153,6 +181,8 @@ describe('Async sign', function() {
 		
 		manager.sign(account, data, function(err, sig) {
 			expect(err).to.equal('account is locked')
+			expect(sig).to.be.null;
+			
 			done();
 		});	
 	});

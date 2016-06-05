@@ -9,7 +9,7 @@ describe('Sync create', function() {
 	this.timeout(10000);
 	
 	var path = temp.path();
-	var manager = accounts.AccountManager(path);
+	var manager = accounts.newManager(path);
 	var passwd = 'my passwd';
 	
 	after(function() {
@@ -23,14 +23,18 @@ describe('Sync create', function() {
 	it('new account', function() {
 		var accountsBefore = manager.accounts();
 		// throws on failure
-		var account = manager.newAccount(passwd);
+		var address = manager.newAccount(passwd);
+		
+		expect(address.length).to.equal(42);
+		expect(address.substr(0, 2)).to.equal("0x");	
+			
 		var accountsAfter = manager.accounts();
 				
 		// test if the newly created account is added to the list
 		expect(accountsBefore.length + 1).to.equal(accountsAfter.length);
 		
 		// verify that the account list has the newly created account
-		assert.notEqual(-1, accountsAfter.indexOf(account));
+		assert.notEqual(-1, accountsAfter.indexOf(address));
 	});
 });
 	
@@ -38,7 +42,7 @@ describe('Sync unlock', function() {
 	this.timeout(10000);
 	
 	var path = temp.path();
-	var manager = accounts.AccountManager(path);
+	var manager = accounts.newManager(path);
 	var passwd = 'my passwd';
 
 	after(function() {
@@ -49,11 +53,25 @@ describe('Sync unlock', function() {
 		});
 	});
 		
-	it('account', function() {
-		var account = manager.newAccount(passwd);
-		
+	it('account with valid password', function() {
+		var account = manager.newAccount(passwd);		
 		expect(manager.unlock(account, passwd)).to.be.true;
+	});
+	
+		
+	it('account with invalid password', function() {
+		var account = manager.newAccount(passwd);		
 		expect(manager.unlock(account, 'invalid' + passwd)).to.be.false;
+	});
+	
+	it('unknown account', function() {
+		var unknownAccount = '0x391694e7e0b0cce554cb130d723a9d27458f9298';
+		expect(manager.unlock(unknownAccount, passwd)).to.be.false;
+	});
+	
+	it('invalid account', function() {
+		var unknownAccount = '0xab';
+		expect(manager.unlock(unknownAccount, passwd)).to.be.false;
 	});
 });
 
@@ -61,7 +79,7 @@ describe('Sync lock', function() {
 	this.timeout(10000);
 	
 	var path = temp.path();
-	var manager = accounts.AccountManager(path);
+	var manager = accounts.newManager(path);
 	var passwd = 'my passwd';
 	
 	it('account', function() {
@@ -88,7 +106,7 @@ describe('Sync sign', function() {
 	this.timeout(10000);
 	
 	var path = temp.path();
-	var manager = accounts.AccountManager(path);
+	var manager = accounts.newManager(path);
 	var passwd = 'my passwd';
 	
 	after(function() {
@@ -121,10 +139,11 @@ describe('Sync sign', function() {
 		var pubKey = ethUtils.ecrecover(d, v, r, s);	
 		var r = ethUtils.publicToAddress(pubKey);
 		
+		// verify signing was done with account associated with address
     	assert.equal('0x' + r.toString('hex'), address);
 	});
 	
-	it('with locked account', function() {
+	it('data with locked account', function() {
 		var account = manager.newAccount(passwd);
 		var data = '0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef';
 		

@@ -35,7 +35,7 @@ void AccountManager::Init(v8::Local<v8::Object> exports) {
     SetPrototypeMethod(tpl, "sign", Sign);
 
     constructor.Reset(isolate, tpl->GetFunction());
-    exports->Set(v8::String::NewFromUtf8(isolate, "AccountManager"),
+    exports->Set(v8::String::NewFromUtf8(isolate, "newManager"),
         tpl->GetFunction());
 }
 
@@ -45,7 +45,7 @@ void AccountManager::New(const v8::FunctionCallbackInfo<v8::Value>& info) {
     if (info.IsConstructCall()) {
         // Invoked as constructor: `new AccountManager(...)`
         if (!info[0]->IsString()) {
-            isolate->ThrowException(v8::String::NewFromUtf8(isolate, "expect filepath as argument"));
+            isolate->ThrowException(v8::String::NewFromUtf8(isolate, "accountManager expects filepath as argument"));
             return;
         }
 
@@ -83,7 +83,7 @@ NAN_METHOD(AccountManager::NewAccount) {
     v8::Isolate* isolate = info.GetIsolate();
 
     if (!info[0]->IsString()) {
-        isolate->ThrowException(v8::String::NewFromUtf8(isolate, "expect passphrase as argument"));
+        isolate->ThrowException(v8::String::NewFromUtf8(isolate, "newAccount expects passphrase as argument"));
         return;
     }
 
@@ -126,7 +126,7 @@ NAN_METHOD(AccountManager::Unlock) {
     v8::Isolate* isolate = info.GetIsolate();
 
     if (!info[0]->IsString() || !info[1]->IsString()) {
-        isolate->ThrowException(v8::String::NewFromUtf8(isolate, "expect address and passphrase as argument"));
+        isolate->ThrowException(v8::String::NewFromUtf8(isolate, "unlock expects address and passphrase as argument"));
         return;
     }
 
@@ -163,7 +163,7 @@ NAN_METHOD(AccountManager::Lock) {
     v8::Isolate* isolate = info.GetIsolate();
 
     if (!info[0]->IsString()) {
-        isolate->ThrowException(v8::String::NewFromUtf8(isolate, "expect address as argument"));
+        isolate->ThrowException(v8::String::NewFromUtf8(isolate, "lock expects address as argument"));
         return;
     }
 
@@ -213,6 +213,11 @@ NAN_METHOD(AccountManager::Accounts) {
 NAN_METHOD(AccountManager::Sign) {
     v8::Isolate* isolate = info.GetIsolate();
     AccountManager* manager(ObjectWrap::Unwrap<AccountManager>(info.Holder()));
+    
+    if (!info[0]->IsString() || !info[1]->IsString()) {
+    	isolate->ThrowException(v8::String::NewFromUtf8(isolate, "sign expects address and 256 bits (hex encoded) data as arguments"));
+        return;
+    }
 
     v8::String::Utf8Value address(info[0]->ToString());
     v8::String::Utf8Value data(info[1]->ToString());
