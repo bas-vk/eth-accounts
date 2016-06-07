@@ -14,7 +14,7 @@
 							"outputs": ["<(SHARED_INTERMEDIATE_DIR)/libethaccounts.h", "<(SHARED_INTERMEDIATE_DIR)/libethaccounts"],
 							"action": [
 								"eval",
-								"go build -buildmode=c-shared -o <(SHARED_INTERMEDIATE_DIR)/libethaccounts bridge.go",
+								"go build -x -buildmode=c-shared -o <(SHARED_INTERMEDIATE_DIR)/libethaccounts bridge.go",
 							],
 						},
 						{
@@ -46,7 +46,7 @@
 					"outputs": ["<(SHARED_INTERMEDIATE_DIR)/libethaccounts.h", "<(SHARED_INTERMEDIATE_DIR)/libethaccounts"],
 					"action": [
 						"eval",
-						"go build -buildmode=c-shared -o <(SHARED_INTERMEDIATE_DIR)/libethaccounts bridge.go",
+						"go build -x -buildmode=c-shared -o <(SHARED_INTERMEDIATE_DIR)/libethaccounts bridge.go",
 					],
 				},
 				{
