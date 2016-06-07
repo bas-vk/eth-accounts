@@ -12,25 +12,34 @@
 					"outputs": ["<(SHARED_INTERMEDIATE_DIR)/libbridge.h", "<(SHARED_INTERMEDIATE_DIR)/libbridge"],
 					"action": [
 						"eval",
-						"go build -buildmode=c-shared -o <(SHARED_INTERMEDIATE_DIR)/libbridge bridge.go",
+						"go build -buildmode=c-shared -o <(SHARED_INTERMEDIATE_DIR)/libethaccounts bridge.go",
 					],
 				},
 				{
-					"action_name": "mv-lib",
-					"inputs": ["<(SHARED_INTERMEDIATE_DIR)/libbridge"],
-					"outputs": ["<(SHARED_INTERMEDIATE_DIR)/libbridge.so"],
+					"action_name": "rename-lib",
+					"inputs": ["<(SHARED_INTERMEDIATE_DIR)/libethaccounts"],
+					"outputs": ["<(SHARED_INTERMEDIATE_DIR)/libethaccounts.so"],
 					"action": [
 						"eval",
-						"mv <(SHARED_INTERMEDIATE_DIR)/libbridge <(SHARED_INTERMEDIATE_DIR)/libbridge.so",
+						"cp <(SHARED_INTERMEDIATE_DIR)/libethaccounts <(SHARED_INTERMEDIATE_DIR)/libethaccounts.so",
 					],
 				},
 				{
-					"action_name": "mv-header",
-					"inputs": ["<(SHARED_INTERMEDIATE_DIR)/libbridge.h"],
-					"outputs": ["<(SHARED_INTERMEDIATE_DIR)/bridge.h"],
+					"action_name": "copy-lib",
+					"inputs": ["<(SHARED_INTERMEDIATE_DIR)/libethaccounts"],
+					"outputs": ["<(PRODUCT_DIR)/../libethaccounts.so"],
 					"action": [
 						"eval",
-						"mv <(SHARED_INTERMEDIATE_DIR)/libbridge.h <(SHARED_INTERMEDIATE_DIR)/bridge.h",
+						"cp <(SHARED_INTERMEDIATE_DIR)/libethaccounts.so <(PRODUCT_DIR)/../libethaccounts.so",
+					],
+				},
+				{
+					"action_name": "move-header",
+					"inputs": ["<(SHARED_INTERMEDIATE_DIR)/libethaccounts.h"],
+					"outputs": ["<(SHARED_INTERMEDIATE_DIR)/libethaccounts.h"],
+					"action": [
+						"eval",
+						"mv <(SHARED_INTERMEDIATE_DIR)/libethaccounts.h <(SHARED_INTERMEDIATE_DIR)/ethaccounts.h",
 					],
 				}
 			]

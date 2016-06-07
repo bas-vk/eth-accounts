@@ -1,5 +1,5 @@
 #include "async.h"
-#include "bridge.h"
+#include "ethaccounts.h"
 
 #include <cstring>
 

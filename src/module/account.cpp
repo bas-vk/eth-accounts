@@ -1,7 +1,7 @@
 #include <node.h>
 
 #include "manager.h"
-#include "bridge.h"
+#include "ethaccounts.h"
 
 // Create package exports
 void InitAll(v8::Local<v8::Object> exports, v8::Local<v8::Object> module) {

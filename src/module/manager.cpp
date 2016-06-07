@@ -2,7 +2,7 @@
 
 #include "manager.h"
 #include "async.h"
-#include "bridge.h"
+#include "ethaccounts.h"
 
 #include <iostream>
 

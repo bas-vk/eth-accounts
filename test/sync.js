@@ -3,7 +3,7 @@ var assert = require('chai').assert,
     temp = require('temp'),
     rmdir = require('rimraf'),
     ethUtils = require('ethereumjs-util')
-    accounts = require('../build/Release/eth-account.node');
+    accounts = require('bindings')('eth-account');
 
 describe('Sync create', function() {
 	this.timeout(10000);
