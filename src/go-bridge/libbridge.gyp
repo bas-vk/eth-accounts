@@ -20,10 +20,10 @@
 						{
 							"action_name": "rename-lib",
 							"inputs": ["<(SHARED_INTERMEDIATE_DIR)/libethaccounts"],
-							"outputs": ["<(PRODUCT_DIR)/../libethaccounts.so"],
+							"outputs": ["<(PRODUCT_DIR)/libethaccounts.so"],
 							"action": [
 								"eval",
-								"mv <(SHARED_INTERMEDIATE_DIR)/libethaccounts <(PRODUCT_DIR)/../libethaccounts.so",
+								"mv <(SHARED_INTERMEDIATE_DIR)/libethaccounts <(PRODUCT_DIR)/libethaccounts.so",
 							],
 						},
 						{
@@ -52,10 +52,10 @@
 				{
 					"action_name": "rename-lib",
 					"inputs": ["<(SHARED_INTERMEDIATE_DIR)/libethaccounts"],
-					"outputs": ["<(PRODUCT_DIR)/../libethaccounts.dylib"],
+					"outputs": ["<(PRODUCT_DIR)/libethaccounts.dylib"],
 					"action": [
 						"eval",
-						"cp <(SHARED_INTERMEDIATE_DIR)/libethaccounts <(PRODUCT_DIR)/../libethaccounts.dylib",
+						"cp <(SHARED_INTERMEDIATE_DIR)/libethaccounts <(PRODUCT_DIR)/libethaccounts.dylib",
 					],
 				},
 				{
