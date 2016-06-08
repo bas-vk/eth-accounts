@@ -7,7 +7,7 @@ Building this package requires [go >=1.6.2](https://golang.org/dl/) and a c++ co
 
 You will also need to fetch and build [`ethereum/go-ethereum`](https://github.com/ethereum/go-ethereum). Clone the repo into your `$GOPATH`:
 
-```bash
+```shell
 $ cd $GOPATH/src
 $ git clone https://github.com/ethereum/go-ethereum github.com/ethereum/go-ethereum
 $ cd github.com/ethereum/go-ethereum
@@ -16,7 +16,7 @@ $ make
 
 And there are a few other libraries you will need:
 
-```bash
+```shell
 $ cd $GOPATH/src
 $ git clone https://github.com/pborman/uuid.git github.com/pborman/uuid
 $ git clone https://github.com/rjeczalik/notify.git github.com/rjeczalik/notify
@@ -39,7 +39,7 @@ The module will be stored in the `build/Release` directory together with a libet
 This requires 2 steps, place the library in a location where the loader will search and order the loader to update its cache. And verify with the ldd utility that the loader is able to find the library.
 
 ```shell
-$ sudo cp build/libethaccounts.so /usr/local/lib/
+$ sudo cp build/Release/libethaccounts.so /usr/local/lib/
 $ sudo ldconfig -n /usr/local/lib
 $ ldd build/Release/eth-account.node 
 	linux-vdso.so.1 (0x00007ffdbbb6d000)
@@ -50,6 +50,12 @@ $ ldd build/Release/eth-account.node
 	libpthread.so.0 => /usr/lib/libpthread.so.0 (0x00007fec91135000)
 	libc.so.6 => /usr/lib/libc.so.6 (0x00007fec90d94000)
 	/usr/lib64/ld-linux-x86-64.so.2 (0x0000561d8fa55000)
+```
+
+If `ldd` returns `not found` for `libethaccounts.so` then try the following before re-running the `ldd` command:
+
+```shell
+$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 ```
 
 ## Unittests
