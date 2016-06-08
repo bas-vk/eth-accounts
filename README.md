@@ -1,13 +1,36 @@
 # Introduction
 Bindings (subset) to the go-ethereum [accounts](https://godoc.org/github.com/ethereum/go-ethereum/accounts) package.
 
-## Installation
+## Requirements
+
 Building this package requires [go >=1.6.2](https://golang.org/dl/) and a c++ compiler (g++, clang++) to be installed.
+
+You will also need to fetch and build [`ethereum/go-ethereum`](https://github.com/ethereum/go-ethereum). Clone the repo into your `$GOPATH`:
+
+```bash
+$ cd $GOPATH/src
+$ git clone https://github.com/ethereum/go-ethereum github.com/ethereum/go-ethereum
+$ cd github.com/ethereum/go-ethereum
+$ make
+```
+
+And there are a few other libraries you will need:
+
+```bash
+$ cd $GOPATH/src
+$ git clone https://github.com/pborman/uuid.git github.com/pborman/uuid
+$ git clone https://github.com/rjeczalik/notify.git github.com/rjeczalik/notify
+$ git clone https://github.com/golang/crypto.git golang.org/x/crypto
+```
+
+## Installation
 
 ```shell
 $ git clone https://github.com/bas-vk/eth-accounts.git
 $ cd eth-accounts
 $ npm install
+$ cd build
+$ make
 ```
 
 The module will be stored in the `build/Release` directory together with a libethaccounts library. On Linux this library needs to be saved in a directory where the loader can find it when node loads the module.
