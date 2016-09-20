@@ -4,7 +4,12 @@
 #include <string>
 #include <nan.h>
 
-// AccountManager wraps a go-etheruem accounts.Manager instance
+// AccountManager wraps a go-etheruem accounts.Manager instance. It is
+// compatible with geth's keystore. It supports both synchronous as
+// asynchronous operations.
+//
+// var manager = new AccountManager(<keystore path>);
+// var manager = AccountManager(<keystore path>);
 class AccountManager : public Nan::ObjectWrap {
 public:
 	static void NewInstance(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -15,6 +20,9 @@ private:
 	~AccountManager();
 	
 	static v8::Persistent<v8::Function> constructor;
+	
+	// New creates a new AccountManager instance. It supports:
+	// new AccountManager(...) and AccountManager(...) from javascript.
 	static void New(const v8::FunctionCallbackInfo<v8::Value>& info);
 	
 	// Create a new account
@@ -42,7 +50,7 @@ private:
 	// identifier for wrapped AccountManager in bridge
 	int id_;
 	
-	// location where to load/store keys
+	// keystore location
 	std::string dir_;
 };
 

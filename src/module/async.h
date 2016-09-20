@@ -5,6 +5,7 @@
 
 namespace ethaccount {
 
+// CreateAccountWorker is a helper class for aynchronous account creation.
 class CreateAccountWorker : public Nan::AsyncWorker {
 public:
     CreateAccountWorker(Nan::Callback* callback, int id, std::string password);
@@ -23,6 +24,7 @@ private:
     char errorMsg[1025];
 };
 
+// UnlockAccountWorker is a helper class for aynchronous account unlocking.
 class UnlockAccountWorker : public Nan::AsyncWorker {
 public:
     UnlockAccountWorker(Nan::Callback* callback, int id, std::string address, std::string password);
@@ -41,6 +43,7 @@ private:
     char errorMsg[1025];
 };
 
+// LockAccountWorker is a helper class for aynchronous account locking.
 class LockAccountWorker : public Nan::AsyncWorker {
 public:
     LockAccountWorker(Nan::Callback* callback, int id, std::string address);
@@ -56,6 +59,7 @@ private:
     bool locked;
 };
 
+// ListAccountsWorker is a helper class for aynchronous account retrieval.
 class ListAccountsWorker : public Nan::AsyncWorker {
 public:
     ListAccountsWorker(Nan::Callback* callback, int id);
@@ -72,6 +76,7 @@ private:
     v8::Local<v8::Array> result;
 };
 
+// SignDataWorker is a helper class for aynchronous data signing.
 class SignDataWorker : public Nan::AsyncWorker {
 public:
     SignDataWorker(Nan::Callback* callback, int id, std::string address, std::string data);

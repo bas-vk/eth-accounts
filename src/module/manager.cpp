@@ -42,15 +42,13 @@ void AccountManager::Init(v8::Local<v8::Object> exports) {
 void AccountManager::New(const v8::FunctionCallbackInfo<v8::Value>& info) {
     v8::Isolate* isolate = info.GetIsolate();
 
-    if (info.IsConstructCall()) {
-        // Invoked as constructor: `new AccountManager(...)`
+    if (info.IsConstructCall()) { // Invoked as constructor: `new AccountManager(...)`
         if (!info[0]->IsString()) {
             isolate->ThrowException(v8::String::NewFromUtf8(isolate, "accountManager expects filepath as argument"));
             return;
         }
 
         std::string keystorePath(*v8::String::Utf8Value(info[0]));
-
         GoInt id = NewAccountManager((char*)keystorePath.c_str());
 
         AccountManager* instance = new AccountManager(int(id), keystorePath);
@@ -58,12 +56,14 @@ void AccountManager::New(const v8::FunctionCallbackInfo<v8::Value>& info) {
 
         return;
     }
-    else {
-        // Invoked as plain function `AccountManager(...)`, turn into construct call.
+    else { // Invoked as plain function `AccountManager(...)`, turn into construct call.
         const int argc = 1;
         v8::Local<v8::Value> argv[argc] = { info[0] };
-        v8::Local<v8::Function> cons = v8::Local<v8::Function>::New(isolate, constructor);
-        info.GetReturnValue().Set(cons->NewInstance(argc, argv));
+        v8::Local<v8::Context> context = isolate->GetCurrentContext();
+		v8::Local<v8::Function> cons = v8::Local<v8::Function>::New(isolate, constructor);
+		v8::Local<v8::Object> result = cons->NewInstance(context, argc, argv).ToLocalChecked();
+		
+		info.GetReturnValue().Set(result);
     }
 }
 
